@@ -1,0 +1,62 @@
+name: Release Version
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  DOTNET_VERSION: '8.x'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        working-directory: ./Bank
+        run: dotnet restore
+
+      - name: Build
+        working-directory: ./Bank
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Run Tests
+        working-directory: ./Bank
+        run: dotnet test --no-build --configuration Release
+
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Pack NuGet Package
+        working-directory: ./Bank/Bank.WebApi
+        run: dotnet pack --configuration Release -p:PackageVersion=${{ steps.get_version.outputs.VERSION }} --output ../release-packages
+
+      - name: Publish to NuGet (GitHub Packages)
+        working-directory: ./Bank
+        run: |
+          dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+          dotnet nuget push "./release-packages/*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "github" --skip-duplicate
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./Bank/release-packages/*.nupkg
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
