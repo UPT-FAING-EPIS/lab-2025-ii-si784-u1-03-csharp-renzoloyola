@@ -1,7 +1,5 @@
 # Diagrama de Clases - Bank Application
 
-## Bank.WebApi.Models
-
 ```mermaid
 classDiagram
     class BankAccount {
@@ -13,15 +11,36 @@ classDiagram
         +void Debit(double amount)
         +void Credit(double amount)
     }
+    
+    class BankAccountTests {
+        +void Debit_WithValidAmount_UpdatesBalance()
+    }
+    
+    BankAccountTests ..> BankAccount : tests
 ```
 
-## Descripción
+## Descripción de Clases
 
 ### BankAccount
-Clase principal que representa una cuenta bancaria con las siguientes características:
+Clase principal que representa una cuenta bancaria.
 
-- **m_customerName**: Nombre del cliente (solo lectura)
-- **m_balance**: Saldo de la cuenta
-- **Debit(amount)**: Permite realizar un débito de la cuenta. Lanza `ArgumentOutOfRangeException` si el monto es mayor al saldo o negativo.
-- **Credit(amount)**: Permite realizar un crédito a la cuenta. Lanza `ArgumentOutOfRangeException` si el monto es negativo.
+**Propiedades:**
+- `CustomerName` (string, readonly): Nombre del cliente
+- `Balance` (double, readonly): Balance actual de la cuenta
+
+**Métodos:**
+- `Debit(double amount)`: Retira fondos de la cuenta
+  - Lanza `ArgumentOutOfRangeException` si el monto es mayor al balance
+  - Lanza `ArgumentOutOfRangeException` si el monto es negativo
+- `Credit(double amount)`: Deposita fondos en la cuenta
+  - Lanza `ArgumentOutOfRangeException` si el monto es negativo
+
+### BankAccountTests
+Clase de pruebas unitarias para BankAccount.
+
+**Métodos de prueba:**
+- `Debit_WithValidAmount_UpdatesBalance()`: Verifica que el método Debit actualice correctamente el balance
+
+## Relaciones
+- `BankAccountTests` depende de `BankAccount` para ejecutar las pruebas
 

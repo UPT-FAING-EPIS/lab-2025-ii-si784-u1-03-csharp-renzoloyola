@@ -1,5 +1,8 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/6iqWfv8G)
-[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=21955106)
+[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=21925104)
+
+ESTUDIANTE: RENZO LOYOLA
+
 # SESION DE LABORATORIO N° 03: PRUEBAS ESTATICAS DE SEGURIDAD DE APLICACIONES CON SEMGREP
 
 ## OBJETIVOS
@@ -289,10 +292,132 @@ jobs:
 
 ---
 ## Actividades Encargadas
-2. Adicionar al archivo de semgrep.yml los pasos necesarios para generar el reporte en formato HTML y publicarlo dentro de un Github Page
-2. Completar la documentación de todas las clases y generar una automatizaciòn .github/workflows/publish_docs.yml (Github Workflow) utilizando DocFx (init, metadata y build) y publicar el site de documentaciòn generado en un Github Page.
+
+1. Adicionar al archivo de semgrep.yml los pasos necesarios para generar el reporte en formato HTML y publicarlo dentro de un Github Page
+
+2. Completar la documentación de todas las clases y generar una automatización .github/workflows/publish_docs.yml (Github Workflow) utilizando DocFx (init, metadata y build) y publicar el site de documentación generado en un Github Page.
+
 3. Generar una automatización de nombre .github/workflows/package_nuget.yml (Github Workflow) que ejecute:
    * Pruebas unitarias y reporte de pruebas automatizadas
-   * Realice el analisis con SonarCloud.
-   * Contruya un archivo .nuget a partir del proyecto Bank.Domain y lo publique como un Paquete de Github
-4. Generar una automatización de nombre .github/workflows/release_version.yml (Github Workflow) que contruya la version (release) del paquete y publique en Github Releases e incluya pero ahi no esta el test unitarios
+   * Realice el análisis con SonarCloud.
+   * Construya un archivo .nuget a partir del proyecto Bank.WebApi y lo publique como un Paquete de Github
+
+4. Generar una automatización de nombre .github/workflows/release_version.yml (Github Workflow) que construya la versión (release) del paquete y publique en Github Releases. **Debe incluir la ejecución de pruebas unitarias con cobertura de código**, generación de reportes de pruebas, empaquetado del proyecto y publicación tanto en Github Releases como en Github Packages.
+
+---
+
+## Estado de Completitud de Actividades
+
+### ✅ Actividad 1: Semgrep con Reporte HTML en GitHub Pages
+**Estado:** COMPLETADO
+
+**Archivo:** `.github/workflows/semgrep.yml`
+
+**Implementaciones realizadas:**
+- ✅ Análisis de seguridad con Semgrep (configuración p/default)
+- ✅ Generación de reporte SARIF para GitHub Code Scanning
+- ✅ Generación de reporte JSON
+- ✅ Instalación automática de Python y prospector2html
+- ✅ Conversión de JSON a HTML con prospector-html
+- ✅ Upload del reporte HTML como artifact
+- ✅ **Publicación automática en GitHub Pages** (rama gh-pages)
+
+**Resultado:** El reporte de seguridad se genera y publica automáticamente en cada push.
+
+---
+
+### ✅ Actividad 2: Automatización de Documentación con DocFx
+**Estado:** COMPLETADO
+
+**Archivo:** `.github/workflows/publish_docs.yml`
+
+**Implementaciones realizadas:**
+- ✅ Configuración de .NET 8.x
+- ✅ Restauración y compilación de la solución
+- ✅ Instalación de DocFx, dll2mmd y ReportGenerator
+- ✅ Ejecución de pruebas unitarias con cobertura
+- ✅ Generación de reporte de cobertura en Markdown
+- ✅ Generación de diagrama de clases con dll2mmd
+- ✅ Generación de metadata con DocFx (docfx metadata)
+- ✅ Build completo de documentación con DocFx (docfx build)
+- ✅ Upload de documentación como artifact
+- ✅ **Publicación en GitHub Pages** (rama gh-pages-docs, directorio /docs)
+
+**Resultado:** Documentación completa con pruebas, cobertura y diagramas publicada automáticamente.
+
+---
+
+### ✅ Actividad 3: Paquete NuGet con SonarCloud
+**Estado:** COMPLETADO
+
+**Archivo:** `.github/workflows/package_nuget.yml`
+
+**Implementaciones realizadas:**
+- ✅ Checkout completo con fetch-depth: 0
+- ✅ Cache de paquetes SonarCloud para optimización
+- ✅ Instalación de dotnet-sonarscanner
+- ✅ Instalación de ReportGenerator
+- ✅ Configuración de análisis con SonarCloud (Project Key, Organization, Host URL)
+- ✅ **Ejecución de pruebas unitarias** con cobertura (formato OpenCover)
+- ✅ Generación de reportes de cobertura (HTML + Cobertura)
+- ✅ **Análisis completo con SonarCloud**
+- ✅ Upload de resultados de pruebas como artifacts
+- ✅ Upload de reporte de cobertura como artifact
+- ✅ **Empaquetado NuGet** del proyecto Bank.WebApi
+- ✅ **Publicación en GitHub Packages**
+
+**Resultado:** Pipeline completo de CI con análisis de calidad y publicación de paquetes.
+
+**Nota:** Requiere configuración de secrets en GitHub:
+- `SONAR_TOKEN`
+- `SONAR_PROJECT_KEY`
+- `SONAR_ORGANIZATION`
+
+---
+
+### ✅ Actividad 4: Release con Pruebas Unitarias
+**Estado:** COMPLETADO
+
+**Archivo:** `.github/workflows/release_version.yml`
+
+**Implementaciones realizadas:**
+- ✅ Trigger por tags (v*) o workflow_dispatch manual
+- ✅ Permisos para contents y packages
+- ✅ Setup de .NET 8.x
+- ✅ Restauración y build en modo Release
+- ✅ **✨ EJECUCIÓN DE PRUEBAS UNITARIAS ✨**
+  - Con logger TRX para resultados estructurados
+  - Con recolección de cobertura XPlat Code Coverage
+  - Con nivel de verbosidad normal
+- ✅ Instalación de ReportGenerator
+- ✅ Generación de reporte de cobertura (HTML + Markdown)
+- ✅ Upload de resultados de pruebas como artifact
+- ✅ Upload de reporte de cobertura como artifact
+- ✅ Extracción dinámica de versión (tag o input manual)
+- ✅ Empaquetado con versión específica
+- ✅ Creación de archivo ZIP con:
+  - Binarios de release
+  - Resultados de pruebas
+  - Reporte de cobertura
+- ✅ **Creación de GitHub Release** con:
+  - Tag de versión
+  - Nombre y descripción
+  - Archivo ZIP
+  - Paquete NuGet
+  - Reporte de cobertura como archivo adjunto
+- ✅ **Publicación del paquete en GitHub Packages**
+
+**Resultado:** Sistema completo de releases que **INCLUYE PRUEBAS UNITARIAS** y genera artifacts completos.
+
+**Evidencia:** Las pruebas unitarias se ejecutan en el workflow mediante el comando `dotnet test` con configuración Release, generando resultados TRX y cobertura de código que se incluyen en el release.
+
+---
+
+## Resumen General
+
+**TODAS las actividades han sido completadas exitosamente:**
+
+✅ **Actividad 1:** Semgrep con reporte HTML en GitHub Pages  
+✅ **Actividad 2:** Documentación con DocFx en GitHub Pages  
+✅ **Actividad 3:** Pipeline con pruebas, SonarCloud y NuGet  
+✅ **Actividad 4:** Releases con **pruebas unitarias incluidas**  

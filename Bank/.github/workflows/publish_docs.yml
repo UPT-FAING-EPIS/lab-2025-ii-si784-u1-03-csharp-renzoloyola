@@ -79,4 +79,3 @@ jobs:
           publish_dir: ./Bank/_site
           publish_branch: gh-pages-docs
           destination_dir: docs
-
